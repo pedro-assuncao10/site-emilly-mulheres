@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Você ❤️</title>
+    
+    <!-- Importando fontes chiques para a carta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
+    <style>
+        /* Estilos Gerais */
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffd3e0 0%, #ffb6c1 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+
+        /* Container dos corações flutuantes */
+        #hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -10vh;
+            font-size: 24px;
+            animation: floatUp 4s linear forwards;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-110vh) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Container Principal */
+        #main-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Envelope */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: translateY(-10px);
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #e65a7e;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Abas do envelope feitas com bordas CSS */
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 120px solid #ff7597;
+            z-index: 3;
+        }
+
+        .envelope::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid #ff8fae;
+            border-right: 150px solid #ff8fae;
+            border-bottom: 200px solid transparent;
+            z-index: 2;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #d94b6e;
+            z-index: 4;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+        }
+
+        /* Coração pulsante no meio do envelope */
+        .heart-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            color: #ff1a1a;
+            z-index: 5;
+            animation: pulse 1.5s infinite;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Animação de abrir o envelope */
+        .envelope-wrapper.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-wrapper.open .heart-seal {
+            display: none;
+        }
+
+        .envelope-wrapper.fade-out {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.8);
+        }
+
+        /* A Carta (escondida inicialmente) */
+        .letter-paper {
+            display: none;
+            position: absolute;
+            width: 90%;
+            max-width: 500px;
+            background: #fffdf8;
+            padding: 40px 30px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15), inset 0 0 20px rgba(255, 230, 230, 0.5);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-image: radial-gradient(#ffe6ea 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .letter-paper.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Tipografia da Carta */
+        .letter-paper h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #d8315b;
+            font-size: 2.8rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .letter-paper p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: #5a4b4e;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .letter-paper .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #d8315b;
+            margin-top: 30px;
+            text-align: right;
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            color: #c93b63;
+            font-weight: bold;
+            font-family: sans-serif;
+            letter-spacing: 1px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Responsividade para celulares pequenos */
+        @media (max-width: 400px) {
+            .envelope { width: 260px; height: 170px; }
+            .envelope::before { border-left: 130px solid transparent; border-right: 130px solid transparent; border-bottom: 100px solid #ff7597; }
+            .envelope::after { border-left: 130px solid #ff8fae; border-right: 130px solid #ff8fae; border-bottom: 170px solid transparent; }
+            .flap { border-left: 130px solid transparent; border-right: 130px solid transparent; border-top: 90px solid #d94b6e; }
+            .letter-paper h1 { font-size: 2.3rem; }
+            .letter-paper p { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="hearts-container"></div>
+
+    <div id="main-container">
+        <!-- O Envelope -->
+        <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
+            <div class="flap"></div>
+            <div class="envelope"></div>
+            <div class="heart-seal">❤️</div>
+            <div class="instruction">Toque na carta</div>
+        </div>
+
+        <!-- A Carta que vai aparecer -->
+        <div class="letter-paper" id="letter">
+            <h1>Feliz Dia das Mulheres!</h1>
+            <p>Para a mulher mais incrível, forte e especial que eu conheço.</p>
+            <p>Que o seu dia seja tão lindo, inspirador e radiante quanto o seu sorriso. Você ilumina a minha vida todos os dias.</p>
+            <p>Obrigado por ser exatamente quem você é.</p>
+            <div class="signature">Com muito amor, seu namorado ❤️</div>
+        </div>
+    </div>
+
+    <script>
+        let isOpened = false;
+
+        function openLetter() {
+            if (isOpened) return;
+            isOpened = true;
+
+            const envelope = document.getElementById('envelope');
+            const letter = document.getElementById('letter');
+
+            // 1. Abre a aba do envelope
+            envelope.classList.add('open');
+
+            // 2. Aguarda um pouquinho, some com o envelope e mostra a carta
+            setTimeout(() => {
+                envelope.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    envelope.style.display = 'none';
+                    letter.style.display = 'block';
+                    
+                    // Pequeno delay para a animação de entrada do CSS funcionar após o display:block
+                    setTimeout(() => {
+                        letter.classList.add('show');
+                        startRainingHearts();
+                    }, 50);
+                }, 500); // Tempo do fade-out do envelope
+            }, 800); // Tempo da aba abrindo
+        }
+
+        function startRainingHearts() {
+            const container = document.getElementById('hearts-container');
+            const hearts = ['❤️', '💖', '💕', '💗', '💓', '🌸'];
+
+            // Cria um coração novo a cada 300ms
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                
+                // Escolhe um emoji aleatório da lista
+                heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+                
+                // Posição horizontal aleatória
+                heart.style.left = Math.random() * 100 + 'vw';
+                
+                // Tamanho aleatório
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                
+                // Duração da animação aleatória (entre 3s e 6s)
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+
+                container.appendChild(heart);
+
+                // Remove o coração do DOM depois que a animação termina para não pesar a página
+                setTimeout(() => {
+                    heart.remove();
+                }, 6000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
