@@ -192,6 +192,27 @@
             transform: translateY(0) scale(1);
         }
 
+        /* Foto da namorada no cantinho */
+        .girlfriend-photo {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 85px;
+            height: 85px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            transform: rotate(12deg);
+            z-index: 10;
+            background-color: #ffd3e0;
+            transition: transform 0.3s ease;
+        }
+
+        .girlfriend-photo:hover {
+            transform: rotate(0deg) scale(1.1);
+        }
+
         /* Tipografia da Carta */
         .letter-paper h1 {
             font-family: 'Dancing Script', cursive;
@@ -200,6 +221,7 @@
             margin-top: 0;
             margin-bottom: 20px;
             line-height: 1.2;
+            padding-right: 40px; /* Evita que o texto fique por baixo da foto */
         }
 
         .letter-paper p {
@@ -242,8 +264,9 @@
             .envelope::before { border-left: 130px solid transparent; border-right: 130px solid transparent; border-bottom: 100px solid #ff7597; }
             .envelope::after { border-left: 130px solid #ff8fae; border-right: 130px solid #ff8fae; border-bottom: 170px solid transparent; }
             .flap { border-left: 130px solid transparent; border-right: 130px solid transparent; border-top: 90px solid #d94b6e; }
-            .letter-paper h1 { font-size: 2.3rem; }
+            .letter-paper h1 { font-size: 2.3rem; padding-right: 30px; }
             .letter-paper p { font-size: 1.1rem; }
+            .girlfriend-photo { width: 65px; height: 65px; top: -15px; right: -15px; border-width: 4px; }
         }
     </style>
 </head>
@@ -262,6 +285,9 @@
 
         <!-- A Carta que vai aparecer -->
         <div class="letter-paper" id="letter">
+            <!-- FOTO DELA: Substitua o link do 'src' pelo link da foto dela ou nome do arquivo (ex: foto.jpg) -->
+            <img src="images/foto-emilly.jpeg" alt="Foto da minha namorada" class="girlfriend-photo">
+            
             <h1>Feliz Dia das Mulheres!</h1>
             <p>Para a mulher mais incrível, forte e especial que eu conheço.</p>
             <p>Que o seu dia seja tão lindo, inspirador e radiante quanto o seu sorriso. Você ilumina a minha vida todos os dias.</p>
